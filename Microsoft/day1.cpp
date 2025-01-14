@@ -1,3 +1,62 @@
+1401. Circle and Rectangle Overlapping
+class Solution {
+public:
+    bool checkOverlap(int radius, int xCenter, int yCenter, int x1, int y1, int x2, int y2) {
+
+        // Note  - 
+        // Circle Equation: Any point (x,y) lies within or on the boundary of the circle if:
+        //                  (x−xCenter)^2 + (y−yCenter)^2 <= (radius)^2 
+        // Rectangle Boundaries: A point (x,y) lies inside or on the boundary of the rectangle if:
+                            // x1 <= x <= x2 and y1 <= y <= y2
+
+
+        int r = radius * radius;
+        for(int i = x1; i<=x2; i++){
+            for(int j = y1; j<=y2; j++){
+                double distance = (i - xCenter) * (i - xCenter) + (j - yCenter) * (j - yCenter);
+                if(distance <= r){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+};
+
+
+1823. Find the Winner of the Circular Game
+
+class Solution {
+public:
+    int findTheWinner(int n, int k) {
+        int winner = 0;
+        for(int i = 2; i<=n; i++){
+            winner = (winner + k) % i;
+        }
+        return winner + 1;
+    }
+};
+
+
+354. Russian Doll Envelopes
+
+class Solution {
+public:
+    int maxEnvelopes(vector<vector<int>>& E) {
+        sort(E.begin(), E.end(), [](vector<int>& a, vector<int>& b) 
+             -> bool {return a[0] == b[0] ? b[1] < a[1] : a[0] < b[0];});
+        vector<int> dp;
+        for (auto& env : E) {
+            int height = env[1];
+            int left = lower_bound(dp.begin(), dp.end(), height) - dp.begin();
+            if (left == dp.size()) dp.push_back(height);
+            dp[left] = height;
+        }
+        return dp.size();
+    }
+};
+
+
 661. Image Smoother
 
 class Solution {
@@ -30,102 +89,5 @@ public:
         }
 
         return result;
-    }
-};
-
-
-2970. Count the Number of Incremovable Subarrays I
-
-class Solution {
-public:
-    int incremovableSubarrayCount(vector<int>& nums) {
-        int n = nums.size();
-        int count = 0;
-
-        if (n == 1) return 1;
-
-        for (int i = 0; i < n; i++)
-        {
-            unordered_map<int, int> mp;
-
-            for (int j = i; j < n; j++)
-            {
-                vector<int> temp;
-                mp[j]++;
-                bool helpme = false;
-
-                for (int k = 0; k < n; k++) {
-                    if (mp.find(k) == mp.end())
-                    {
-                        temp.push_back(nums[k]);
-                    }
-                }
-                if (temp.size() == 1) count += 1;
-                else if (temp.size() == 0) count += 1;
-                else 
-                {
-                    for (int m = 0; m < temp.size() - 1; m++)
-                    {
-                        if (temp[m] >= temp[m + 1]) helpme = true;
-                    }
-
-                    if (helpme == false) count += 1;
-                }
-            }
-        }
-        return count;
-    }
-};
-
-
-299. Bulls and Cows
-
-class Solution {
-public:
-    string getHint(string secret, string guess) {
-        int count = 0;
-        int mount = 0; 
-        string ans = "";
-        int hash[256] = {};
-        for(int i = 0; i<secret.length();i++) {
-            if(secret[i] == guess[i]) {
-                count++;
-            }
-        }
-        
-        for(int i = 0; i < secret.length();i++) {
-            hash[secret[i]]++;
-        }
-        for(int i = 0; i < guess.length();i++) {
-            if(hash[guess[i]] > 0) { 
-                mount++; 
-                hash[guess[i]]--; 
-            }
-        }
-        mount -= count;
-        ans += to_string(count) + 'A' + to_string(mount) + 'B'; 
-        return ans;
-    }
-};
-
-
-2559. Count Vowel Strings in Ranges
-
-class Solution {
-public:
-    vector<int> vowelStrings(vector<string>& words, vector<vector<int>>& queries) {
-        const unsigned isVowel=1+(1<<('e'-'a'))+(1<<('i'-'a'))+(1<<('o'-'a'))+(1<<('u'-'a'));
-        const int n=words.size(), qz=queries.size();
-        vector<int> cnt(n+1, 0);
-        for(int i=0; i<n; i++){
-            string& w=words[i];
-            cnt[i+1]=cnt[i]+(((1<<(w[0]-'a'))& isVowel) && ((1<<(w.back()-'a'))& isVowel));
-        }
-        vector<int> ans(qz, 0);
-        int i=0;
-        for(auto& q: queries){
-            ans[i++]=cnt[q[1]+1]-cnt[q[0]];
-        }
-        return ans;
     }
 };

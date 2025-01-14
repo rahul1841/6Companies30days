@@ -26,61 +26,61 @@ public:
     }
 };
 
-
-994. Rotting Oranges
+845. Longest Mountain in Array
 
 class Solution {
 public:
-    int orangesRotting(vector<vector<int>>& grid) {
-
-        int time = 0;
-        int n = grid.size();
-        int m = grid[0].size();
-
-        vector<vector<int>> vis(n, vector<int>(m, 0));
-
-        // r, c, t
-        queue<pair<pair<int, int>, int> > q; 
-
-        for(int i = 0; i<n; i++){
-            for(int j = 0; j<m; j++){
-                if(grid[i][j] == 2){
-                    vis[i][j] = 2;
-                    q.push({{i, j}, 0});
+    int longestMountain(vector<int>& arr) {
+        int n=arr.size(),res=0,answer=0;
+        bool wasInc=false;
+        bool wasIncAndNowDcr=false;
+        for(int i=1;i<n;i++){
+            if(arr[i] > arr[i-1]){
+                if(wasIncAndNowDcr==true){
+                    answer=0;
+                    wasIncAndNowDcr=false;
                 }
+                answer++;
+                wasInc=true;
+            } 
+            else if(arr[i] < arr[i-1] && (wasInc || wasIncAndNowDcr)){
+                answer++;
+                wasIncAndNowDcr=true;
+                res=max(res,answer+1);
+            }
+            else if(arr[i]==arr[i-1]){
+                answer=0;
+                wasIncAndNowDcr=false;
+                wasInc=false;
             }
         }
-
-        while(!q.empty()){
-            int row = q.front().first.first;
-            int col = q.front().first.second;
-            int t = q.front().second;
-            q.pop();
-
-            time = max(time, t);
-
-            int delr[] = {-1, 0, 1, 0};
-            int delc[] = {0, 1, 0, -1};
-
-            for(int i = 0; i<4; i++){
-                int nrow = row + delr[i];
-                int ncol = col + delc[i];
-
-                if((nrow >= 0 && nrow < n) && (ncol >= 0 && ncol < m) && (vis[nrow][ncol] != 2) 
-                    && (grid[nrow][ncol] == 1)){
-                        vis[nrow][ncol] = 2;
-                        q.push({{nrow, ncol}, t + 1});
-                    }
-            }
-        }
-
-        for(int i = 0; i<n; i++){
-            for(int j = 0; j<m; j++){
-                if(grid[i][j] == 1 && vis[i][j] != 2) return -1;
-            }
-        }
-        return time;
+        return res;
     }
 };
 
+2461. Maximum Sum of Distinct Subarrays With Length K
 
+class Solution {
+public:
+    long long maximumSubarraySum(vector<int>& nums, int k) {
+        long long n = nums.size(), ws = 0, mx = 0;
+        unordered_map<int, int> mp;
+
+        for (int i = 0; i < n; i++) {
+            mp[nums[i]]++;
+            ws += nums[i];
+            if (i >= k) {
+                int le = nums[i - k];
+                mp[le]--;
+                ws -= le;
+                if (mp[le] == 0) {
+                    mp.erase(le);
+                }
+            }
+            if (i >= k - 1 && mp.size() == k) {
+                mx = max(mx, ws);
+            }
+        }
+        return mx;
+    }
+};

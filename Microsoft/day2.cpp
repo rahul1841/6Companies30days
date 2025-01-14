@@ -1,65 +1,3 @@
-1823. Find the Winner of the Circular Game
-
-approach 1:
-class Solution {
-public:
-    int findTheWinner(int n, int k) {
-        queue<int> q;
-        for(int i = 1; i<=n; i++){
-            q.push(i);
-        }
-        
-        while(q.size() > 1){
-            for(int i = 1; i<k; i++){
-                q.push(q.front());
-                q.pop();
-            }
-            q.pop();
-        }
-        return q.front();
-    }
-};
-
-follow up sc- 0(1)
-class Solution {
-public:
-    int findTheWinner(int n, int k) {
-        int winner = 0; 
-        for (int i = 2; i <= n; i++) {
-            winner = (winner + k) % i; 
-        }
-        return winner + 1;
-    }
-};
-
-
-1401. Circle and Rectangle Overlapping
-
-class Solution {
-public:
-    bool checkOverlap(int radius, int xCenter, int yCenter, int x1, int y1, int x2, int y2) {
-
-        // Note  - 
-        // Circle Equation: Any point (x,y) lies within or on the boundary of the circle if:
-        //                  (x−xCenter)^2 + (y−yCenter)^2 <= (radius)^2 
-        // Rectangle Boundaries: A point (x,y) lies inside or on the boundary of the rectangle if:
-                            // x1 <= x <= x2 and y1 <= y <= y2
-
-
-        int r = radius * radius;
-        for(int i = x1; i<=x2; i++){
-            for(int j = y1; j<=y2; j++){
-                double distance = (i - xCenter) * (i - xCenter) + (j - yCenter) * (j - yCenter);
-                if(distance <= r){
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-};
-
-
 462. Minimum Moves to Equal Array Elements II
 
 class Solution {
@@ -118,6 +56,64 @@ public:
  * vector<int> param_1 = obj->pick();
  */
 
-Reference for this question :   https://youtu.be/8kwPXbTMSnk?si=wIzXhFF7Ni2UTHt7
+
+299. Bulls and Cows
+
+class Solution {
+public:
+    string getHint(string secret, string guess) {
+        int count = 0;
+        int mount = 0; 
+        string ans = "";
+        int hash[256] = {};
+        for(int i = 0; i<secret.length();i++) {
+            if(secret[i] == guess[i]) {
+                count++;
+            }
+        }
+        
+        for(int i = 0; i < secret.length();i++) {
+            hash[secret[i]]++;
+        }
+        for(int i = 0; i < guess.length();i++) {
+            if(hash[guess[i]] > 0) { 
+                mount++; 
+                hash[guess[i]]--; 
+            }
+        }
+        mount -= count;
+        ans += to_string(count) + 'A' + to_string(mount) + 'B'; 
+        return ans;
+    }
+};
 
 
+1248. Count Number of Nice Subarrays
+
+class Solution {
+public:
+    //  Instead of checking if a subarray has exactly k odd numbers, treat odd numbers as 1 and even numbers as 0 using nums[j] % 2.
+    //  the problem then becomes equivalent to finding subarrays with a sum of k.
+    int helper(vector<int> &nums, int goal){
+        if(goal < 0) return 0;
+        int n = nums.size();
+        int i = 0, j = 0, sum = 0, count = 0;
+
+        while(j < n){
+            sum += nums[j] % 2;
+            while(sum > goal){
+                sum -= nums[i] % 2;
+                i++;
+            }
+            count += (j - i + 1); // because 0 based indexing
+            j++;
+        }
+        return count;
+    }
+
+    int numberOfSubarrays(vector<int>& nums, int k) {
+        return helper(nums, k) - helper(nums, k-1);
+        // explanation eg:1
+        // cnt subarrays with sum <= 3 - count subarrays with sum <=2  ==> cnt subarrays with sum = 3
+    }
+};
