@@ -170,10 +170,8 @@ public:
                 cost -= abs(s[l] - t[l]);
                 l++;
             }
-
             result = max(result, r - l + 1);
         }
-
         return result;
     }
 };
