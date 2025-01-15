@@ -19,6 +19,7 @@ public:
     }
 };
 
+Q2:
 331. Verify Preorder Serialization of a Binary Tree
 
 class Solution {
@@ -39,7 +40,7 @@ public:
     }
 };
 
-
+Q3:
 692. Top K Frequent Words
 
 class Solution {
