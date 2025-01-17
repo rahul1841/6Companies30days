@@ -66,3 +66,58 @@ public:
 };
 
 
+273. Integer to English Words
+
+#include <string>
+using namespace std;
+
+class Solution {
+public:
+    string ones[20] = {"", "One ", "Two ", "Three ", "Four ", "Five ", "Six ", "Seven ", "Eight ", "Nine ", "Ten ", "Eleven ", "Twelve ", "Thirteen ", "Fourteen ", "Fifteen ", "Sixteen ", "Seventeen ", "Eighteen ", "Nineteen "};
+    string tens[10] = {"", "", "Twenty ", "Thirty ", "Forty ", "Fifty ", "Sixty ", "Seventy ", "Eighty ", "Ninety "};
+
+    string numToWord(int n, string s) {
+        string str = "";
+        if (n > 19) {
+            str += tens[n / 10] + ones[n % 10];
+        } else {
+            str += ones[n];
+        }
+        if (n) {
+            str += s;
+        }
+        return str;
+    }
+
+    string numToWordTriple(int n, string s) {
+        string str = "";
+        if (n > 99) {
+            str += ones[n / 100] + "Hundred ";
+        }
+        str += numToWord(n % 100, "");
+        if (n) {
+            str += s;
+        }
+        return str;
+    }
+
+    string numberToWords(int n) {
+        if (n == 0) return "Zero";
+
+        string ans = "";
+        ans += numToWordTriple((n / 1000000000) % 1000, "Billion ");
+        ans += numToWordTriple((n / 1000000) % 1000, "Million ");
+        ans += numToWordTriple((n / 1000) % 1000, "Thousand ");
+        ans += numToWordTriple((n / 100) % 10, "Hundred ");
+        ans += numToWord(n % 100, "");
+
+        // Trim any trailing spaces
+        while (!ans.empty() && ans.back() == ' ') {
+            ans.pop_back();
+        }
+
+        return ans;
+    }
+};
+
+
