@@ -46,4 +46,87 @@ public:
 };
 
 
+1568. Minimum Number of Days to Disconnect Island
 
+class Solution {
+public:
+    void dfs(vector<vector<int>>& mat, int i, int j) {
+        if (i < 0 || i >= mat.size() || j < 0 || j >= mat[0].size() ||
+            mat[i][j] == 0)
+            return;
+        mat[i][j] = 0;
+        dfs(mat, i + 1, j);
+        dfs(mat, i - 1, j);
+        dfs(mat, i, j + 1);
+        dfs(mat, i, j - 1);
+    }
+    int countIslands(vector<vector<int>> grid) {
+        int isl = 0;
+        for(int i=0; i<grid.size(); i++) {
+            for(int j=0; j<grid[0].size(); j++) {
+                if(grid[i][j] == 1) {
+                    isl++;
+                    dfs(grid, i, j);
+                }
+            }
+        }
+        return isl;
+    }
+    int minDays(vector<vector<int>>& grid) {
+        int n = countIslands(grid);
+        if(n > 1 || n == 0) return 0;
+        for(int i=0; i<grid.size(); i++) {
+            for(int j=0; j<grid[0].size(); j++) {
+                if(grid[i][j] == 1) {
+                    grid[i][j] = 0;
+                    int isl = countIslands(grid);
+                    if(isl>1 || isl==0) return 1;
+                    grid[i][j] = 1;
+                }
+            }
+        }
+        return 2;
+    }
+};
+
+
+211. Design Add and Search Words Data Structure
+
+class WordDictionary {
+public:
+    vector<string> v;
+    WordDictionary() {
+        
+    }
+    
+    void addWord(string word) {
+        v.push_back(word);
+    }
+    
+    bool search(string word) {
+        int count=0;
+        int n=word.size();
+        for(int i=0; i<v.size(); i++){
+            if(n==v[i].size()){
+                for(int j=0; j<n; j++){
+                    if(v[i][j]==word[j]||word[j]=='.'){
+                        count++;
+                    }
+                    else{
+                        count=0;
+                        break;
+                    }
+                }
+                if(count==n) return true;
+            }
+        }
+        return false;
+    }
+};
+
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary* obj = new WordDictionary();
+ * obj->addWord(word);
+ * bool param_2 = obj->search(word);
+ */
