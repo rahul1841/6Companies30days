@@ -148,4 +148,27 @@ public:
 };
 
 
-
+2943. Maximize Area of Square Hole in Grid
+class Solution {
+public:
+    int maximizeSquareHoleArea(int n, int m, vector<int>& hBars, vector<int>& vBars) {
+        sort(hBars.begin(), hBars.end());
+        sort(vBars.begin(), vBars.end());
+        
+        int answer = 0, h_removed = 0;
+            
+        for(int h = 0; h < hBars.size(); h++) {
+            if(h && hBars[h - 1] == hBars[h] - 1) h_removed++;
+            else h_removed = 1;
+            int v_removed = 0;
+            for(int v = 0; v < vBars.size(); v++) {
+                if(v && vBars[v - 1] == vBars[v] - 1) v_removed++;
+                else v_removed = 1;
+                int width = min(h_removed + 1, v_removed + 1);
+                answer = max(answer,  width * width);
+            }
+        }
+        
+        return answer;
+    }
+};
