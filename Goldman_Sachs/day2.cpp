@@ -54,7 +54,6 @@ vector<int> findTwoElement(vector<int>& arr) {
                 ans[1] = i + 1;    
             }
         }
-    
         return ans;
     }
 
@@ -98,3 +97,4 @@ public:
  * vector<int> param_1 = obj->flip();
  * obj->reset();
  */
+
